@@ -30,29 +30,25 @@ class Liczba_wymierna:
             self.fraction_reduction()
             self.integer_part, self.numerator, self.denominator = self.convert_to_mixed_num(self._numerator, self._denominator)
         else:
-            self.integer_part, self.numerator, self.denominator = integer_part, 0, 0
+            self.integer_part = integer_part
+            self.numerator, self.denominator = self.get_complex_fraction()
     
 
-    def __str__(self):
+    def __repr__(self):
         if self.integer_part:
             if self.numerator != 0:
-                return "Ulamek niewlasciwy: {}/{} Czesc calkowita: {} czesc ulamkowa: {}/{}".format(
-                    self._numerator,
-                    self._denominator, 
+                return "Czesc calkowita: {} czesc ulamkowa: {}/{}".format(
                     self.integer_part, 
                     self.numerator, 
                     self.denominator)
             else:
-                return "Ulamek niewlasciwy: {}/{} Liczba calkowita: {}".format(
-                    self.integer_part, 
-                    1, 
-                    self.integer_part)
+                return "Liczba calkowita: {} brak czesci ulamowej".format(self.integer_part)
         else:
             return "Ulamek zwykly: {}/{} brak liczby calkowitej".format(
                 self._numerator,
                 self._denominator)
     
-    def __repr__(self):
+    def __str__(self):
         return "RationalNumber({},{},{})".format(
             self.integer_part, 
             self.numerator, 
@@ -77,7 +73,10 @@ class Liczba_wymierna:
         return self._numerator, self._denominator
         
     def get_complex_fraction(self):
-        return (self._numerator, self._denominator)
+        if self._numerator != 0 and self._denominator != 0:
+            return (self._numerator, self._denominator)
+        else:
+            return (self.integer_part, 1)
 
     def get_integer_part(self):
         return self.integer_part
@@ -86,31 +85,57 @@ class Liczba_wymierna:
         return (self.numerator, self.denominator)
 
     def __eq__(self, other):
-        l1, m1 = self.get_complex_fraction()
-        l2, m2 = other.get_complex_fraction()
-        return l1 == l2 and m1 == m2
+        n1, d1 = self.get_complex_fraction()
+        n2, d2 = other.get_complex_fraction()
+        return n1 == n2 and d1 == d2
 
     def __gt__(self, other):
-        l1, m1 = self.get_complex_fraction()
-        l2, m2 = other.get_complex_fraction()
-        return l1/m1 > l2/m2
+        n1, d1 = self.get_complex_fraction()
+        n2, d2 = other.get_complex_fraction()
+        return n1/d1 > n2/d2
 
     def __ge__(self, other):
         return self > other or self == other
 
     def __lt__(self, other):
-        l1, m1 = self.get_complex_fraction()
-        l2, m2 = other.get_complex_fraction()
-        return l1/m1 < l2/m2
+        n1, d1 = self.get_complex_fraction()
+        n2, d2 = other.get_complex_fraction()
+        return n1/d1 < n2/d2
 
     def __le__(self, other):
         return self < other or self == other
 
     def __add__(self, other):
-        pass
-        # new_c = self.c + other.c
-        # self.check_m
-        # self.check_
-        # if self.m != other.m:
+        n1, d1 = self.get_complex_fraction()
+        n2, d2 = other.get_complex_fraction()
+        
+        # sprowadzic do wspolnego mianownika
+        n1_f = n1 * d2
+        d1_f = d1 * d2
+        n2_f = n2 * d1
+        d2_f = d2 * d1
 
-        # return Liczba_wymierna(new_c, new_l, new_m)
+        return Liczba_wymierna(0, n1_f + n2_f, d1_f)
+
+    def __sub__(self, other):
+        n1, d1 = self.get_complex_fraction()
+        n2, d2 = other.get_complex_fraction()
+        
+        # sprowadzic do wspolnego mianownika
+        n1_f = n1 * d2
+        d1_f = d1 * d2
+        n2_f = n2 * d1
+        d2_f = d2 * d1
+
+        return Liczba_wymierna(0, n1_f - n2_f, d1_f)
+
+    # def __mul__(self, other):
+    #     return Liczba_wymierna(0, self._numerator * other._numerator, self._denominator * other._denominator)
+    
+    # def __truediv__(self, other):
+    #     n, d = other.get_complex_fraction()
+    #     if n < 0:
+    #         d = -d
+    #         n = -n
+    #     return self.__mul__(Liczba_wymierna(0, d, n))
+    
