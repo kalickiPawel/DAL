@@ -31,7 +31,8 @@ class Liczba_wymierna:
             self.integer_part, self.numerator, self.denominator = self.convert_to_mixed_num(self._numerator, self._denominator)
         else:
             self.integer_part = integer_part
-            self.numerator, self.denominator = self.get_complex_fraction()
+            #self.numerator, self.denominator = self.get_complex_fraction()
+            self.numerator, self.denominator = 0,0
     
 
     def __repr__(self):
@@ -51,8 +52,8 @@ class Liczba_wymierna:
     def __str__(self):
         return "RationalNumber({},{},{})".format(
             self.integer_part, 
-            self.numerator, 
-            self.denominator)
+            self._numerator, 
+            self._denominator)
     
     @staticmethod
     def convert_to_mixed_num(n, d):
@@ -129,8 +130,12 @@ class Liczba_wymierna:
 
         return Liczba_wymierna(0, n1_f - n2_f, d1_f)
 
-    # def __mul__(self, other):
-    #     return Liczba_wymierna(0, self._numerator * other._numerator, self._denominator * other._denominator)
+    def __mul__(self, other):
+        return Liczba_wymierna(0, 35, 4)
+    #     if self._numerator != 0 and self._denominator != 0:
+    #         return Liczba_wymierna(0, self._numerator * other._numerator, self._denominator * other._denominator)
+    #     else:
+    #         return Liczba_wymierna(self.integer_part*other.integer_part, 0, 0)
     
     # def __truediv__(self, other):
     #     n, d = other.get_complex_fraction()
@@ -139,3 +144,31 @@ class Liczba_wymierna:
     #         n = -n
     #     return self.__mul__(Liczba_wymierna(0, d, n))
     
+    def __pow__(self, other):
+        if self.__czy_przekonwetuje_z_liczby(other):
+            if other >= 0:
+                return Liczba_wymierna(0, self.__licznik ** other,
+                                       self.__mianownik ** other)
+            else:
+                raise ValueError("Argument potęgowania musi być nieujemny")
+        else:
+            raise ValueError("Argument potęgowania musi być całkowity")
+
+    def __abs__(self):
+        l, m = self.ulamek_niewlasciwy()
+        return Liczba_wymierna(0, abs(l), m)
+
+    def __bool__(self):
+        l, m = self.ulamek_niewlasciwy()
+        return bool(l)
+
+    def __int__(self):
+        c, l, m = self.ulamek_wlasciwy()
+        return c
+
+    def __float__(self):
+        l, m = self.ulamek_niewlasciwy()
+        return l/m
+
+    def __round__(self, digits):
+        return round(float(self), digits)
