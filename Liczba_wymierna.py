@@ -131,44 +131,35 @@ class Liczba_wymierna:
         return Liczba_wymierna(0, n1_f - n2_f, d1_f)
 
     def __mul__(self, other):
-        return Liczba_wymierna(0, 35, 4)
-    #     if self._numerator != 0 and self._denominator != 0:
-    #         return Liczba_wymierna(0, self._numerator * other._numerator, self._denominator * other._denominator)
-    #     else:
-    #         return Liczba_wymierna(self.integer_part*other.integer_part, 0, 0)
+        numerator = self._numerator * other._numerator
+        denominator = self._denominator * other._denominator
+        return Liczba_wymierna(0, numerator, denominator)
     
-    # def __truediv__(self, other):
-    #     n, d = other.get_complex_fraction()
-    #     if n < 0:
-    #         d = -d
-    #         n = -n
-    #     return self.__mul__(Liczba_wymierna(0, d, n))
+    def __truediv__(self, other):
+        n, d = other.get_complex_fraction()
+        if n < 0:
+            d = -d
+            n = -n
+        return self.__mul__(Liczba_wymierna(0, d, n))
     
     def __pow__(self, other):
-        if self.__czy_przekonwetuje_z_liczby(other):
-            if other >= 0:
-                return Liczba_wymierna(0, self.__licznik ** other,
-                                       self.__mianownik ** other)
-            else:
-                raise ValueError("Argument potęgowania musi być nieujemny")
-        else:
-            raise ValueError("Argument potęgowania musi być całkowity")
+        return Liczba_wymierna(0, self._numerator ** other, self._denominator ** other)
 
     def __abs__(self):
-        l, m = self.ulamek_niewlasciwy()
-        return Liczba_wymierna(0, abs(l), m)
+        n, d = self.get_complex_fraction()
+        return Liczba_wymierna(0, abs(n), d)
 
     def __bool__(self):
-        l, m = self.ulamek_niewlasciwy()
-        return bool(l)
+        n, d = self.get_complex_fraction()
+        return bool(n)
 
     def __int__(self):
-        c, l, m = self.ulamek_wlasciwy()
-        return c
+        t = self.get_integer_part()
+        return t
 
     def __float__(self):
-        l, m = self.ulamek_niewlasciwy()
-        return l/m
+        n, d = self.get_complex_fraction()
+        return n/d
 
     def __round__(self, digits):
         return round(float(self), digits)
