@@ -41,29 +41,42 @@ def exercise2(n):
         while w - 1 >= 0 and result[w - 1, k] == 0:
             result[w, k] = i
             w, i = w - 1, i + 1
-        if i >= n ** 2: break
+        if i >= n ** 2:
+            break
 
         while k + 1 < n and result[w, k + 1] == 0:
             result[w, k] = i
             k, i = k + 1, i + 1
-        if i >= n ** 2: break
+        if i >= n ** 2:
+            break
 
         while w + 1 < n and result[w + 1, k] == 0:
             result[w, k] = i
             w, i = w + 1, i + 1
-        if i >= n ** 2: break
+        if i >= n ** 2:
+            break
 
         while k - 1 >= 0 and result[w, k - 1] == 0:
             result[w, k] = i
             k, i = k - 1, i + 1
-        if i >= n ** 2: break
+        if i >= n ** 2:
+            break
 
     result[w, k] = i
     return result
 
 
-def exercise3():
-    pass
+def exercise3(input_matrix, notch):
+    """
+    This function notch the values from smaller than -notch and greater than notch.
+    Values are changed to 0 but when values are between -notch and notch are changed to 1.
+    :param input_matrix: <class 'numpy.ndarray'>
+    :param notch: <class 'int'>
+    :return: <class 'numpy.ndarray'> -> new matrix with 0s and 1s
+    """
+    result = np.zeros(input_matrix.shape)
+    result[(input_matrix < -notch) | (matrix > notch)] = 1
+    return result
 
 
 def exercise4():
@@ -85,9 +98,16 @@ if __name__ == "__main__":
     # exercise1_1(a, offset)
 
     print("--------------Exercise_2--------------")
+
     n = 5
     print(exercise2(n))
 
-    # print("--------------Exercise_3--------------")
+    print("--------------Exercise_3--------------")
+
+    a = 2
+    matrix = np.random.randint(-8, 5, size=(5, 3))
+    print("Input: \n", matrix)
+    print("Output: \n", exercise3(matrix, a))
+
     # print("--------------Exercise_4--------------")
     # print("--------------Exercise_5--------------")
