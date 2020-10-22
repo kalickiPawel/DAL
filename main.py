@@ -79,8 +79,14 @@ def exercise3(input_matrix, notch):
     return result
 
 
-def exercise4():
-    pass
+def exercise4(input_matrix, notch):
+    """
+    This function notch the rows where are values smaller than -notch and greater than notch.
+    :param input_matrix: <class 'numpy.ndarray'>
+    :param notch: <class 'int'>
+    :return: <class 'numpy.ndarray'> -> new matrix without rows with values in range from -notch to notch.
+    """
+    return input_matrix[np.all((input_matrix >= -notch) & (input_matrix <= notch), axis=1)]
 
 
 def exercise5():
@@ -89,25 +95,26 @@ def exercise5():
 
 if __name__ == "__main__":
     print("--------------Exercise_1--------------")
-
     a = np.ones((4, 5))
     offset = 2
-
     print("Input: \n", a)
     print("Output: \n", exercise1(a, offset))
     # exercise1_1(a, offset)
 
     print("--------------Exercise_2--------------")
-
     n = 5
     print(exercise2(n))
 
     print("--------------Exercise_3--------------")
-
     a = 2
     matrix = np.random.randint(-8, 5, size=(5, 3))
     print("Input: \n", matrix)
     print("Output: \n", exercise3(matrix, a))
 
-    # print("--------------Exercise_4--------------")
+    print("--------------Exercise_4--------------")
+    a = 2
+    matrix = np.random.randint(-8, 5, size=(5, 3))
+    print("Input: \n", matrix)
+    print("Output: \n", exercise4(matrix, a))
+
     # print("--------------Exercise_5--------------")
