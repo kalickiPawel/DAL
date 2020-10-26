@@ -44,7 +44,25 @@ def exercise_3():
 
 
 def exercise_4():
-    pass
+    print("Started ---------Exercise 4---------")
+    x = np.arange(-2, 2, 0.01)
+
+    y1 = -x + 1
+    y2 = x ** 2 - 1
+    y3 = np.sin(x)
+
+    plt.plot(x, y1, 'r',
+             x, y2, 'g',
+             x, y3, 'b')
+
+    plt.fill_between(
+        x, np.minimum(y1, y3), y2, where=np.minimum(y1, y3) > y2,
+        hatch='.', color='orange', alpha=0.7
+    )
+    plt.legend(['$y < - x + 1$', '$y > x^2 - 1$', '$y < sin(x)$'])
+    ax = plt.gca()
+    ax.set_ylim((-2, 2))  # limits for y axes
+    plt.show()
 
 
 def exercise_5():
@@ -54,3 +72,4 @@ def exercise_5():
 if __name__ == "__main__":
     exercise_1()
     exercise_3()
+    exercise_4()
