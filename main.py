@@ -1,3 +1,4 @@
+import random
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MaxNLocator
@@ -80,7 +81,23 @@ def exercise_5():
 
 
 def exercise_6():
-    pass
+    k, a_val = 200, [2, 2.9, 3, 3.56, 3.6]
+    p, q = np.zeros((k, 1)), np.zeros((k, 1))
+    p[0], q[0] = 0.1, 0.0001
+
+    fig, ax = plt.subplots(5, 1)
+    fig.set_size_inches(8.6, 6.5)
+    for item, axes in enumerate(ax):
+        a = a_val[item]
+        axes.set_title(f"a: {a}")
+        for i in range(1, k):
+            p[i] = a * p[i - 1] * (1 - p[i - 1])
+            q[i] = a * q[i - 1] * (1 - q[i - 1])
+        axes.plot(np.arange(k), p, 'r')
+        axes.plot(np.arange(k), q, 'g')
+        axes.plot(np.arange(k), np.abs(p-q), 'b')
+    plt.subplots_adjust(hspace=1.0)
+    plt.show()
 
 
 if __name__ == "__main__":
@@ -88,3 +105,4 @@ if __name__ == "__main__":
     exercise_3()
     exercise_4()
     exercise_5()
+    exercise_6()
