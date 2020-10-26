@@ -66,6 +66,20 @@ def exercise_4():
 
 
 def exercise_5():
+    print("Started ---------Exercise 5---------")
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    x, y = np.meshgrid(np.linspace(-2, 2, 50), np.linspace(-2, 2, 50))
+
+    z1 = (1 / (1 + np.e ** (-x - y))) * (x + y >= 0)
+    z2 = 0.5 * (x + y < 0)
+    z = z1 + z2
+
+    ax.plot_surface(x, y, z, rstride=1, cstride=1, cmap='jet', alpha=0.8)
+    plt.show()
+
+
+def exercise_6():
     pass
 
 
@@ -73,3 +87,4 @@ if __name__ == "__main__":
     exercise_1()
     exercise_3()
     exercise_4()
+    exercise_5()
