@@ -1,159 +1,128 @@
-import time
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.cluster.vq import whiten, kmeans, kmeans2
-
-from sympy import symbols, Eq, solve
-from scipy.optimize import minimize, fsolve
-from scipy.integrate import trapz
+from matplotlib.ticker import MaxNLocator
 
 
-def exercise1():
-    print("Exercise 1 ---------Started---------")
-    t1 = time.time()
-    x, y, z = symbols('x y z')
-    eq1 = Eq(5 * (x ** -1) - 2 * (y ** -1) + 3 * (z ** -1), (-9 / 4))
-    eq2 = Eq(2 * (x ** -1) + 3 * (y ** -1) + 1 * (z ** -1), (5 / 12))
-    eq3 = Eq(1 * (x ** -1) + 4 * (y ** -1) - 2 * (z ** -1), (5 / 3))
-
-    print(f'{eq1}\n{eq2}\n{eq3}')
-    t2 = time.time()
-    print(f'Exercise 1 ----------DONE----------- [TIME: {t2 - t1}s]')
-    return solve((eq1, eq2, eq3), (x, y, z))
-
-
-def exercise2():
-    print("Exercise 2 ---------Started---------")
-    t1 = time.time()
-
-    cons = (
-        {'type': 'ineq', 'fun': lambda x: -x[0]},
-        {'type': 'ineq', 'fun': lambda x: -x[1]},
-        {'type': 'ineq', 'fun': lambda x: x[1] + x[0] + 3}
+def exercise_1():
+    print("Started ---------Exercise 1---------")
+    x = np.linspace(-np.pi, np.pi, 200)
+    f1 = np.cos(x)
+    f2 = np.sign(x)
+    plt.plot(x, f1, 'k')
+    plt.plot(x, f2, 'r')
+    plt.legend(['f(x) = cos(x)', 'g(x) = sign(x)'])
+    plt.xticks(
+        (-np.pi, -np.pi / 2, 0, np.pi / 2, np.pi),
+        ("$-\pi$", "$-\\frac{\pi}{2}$", 0, "$\\frac{\pi}{2}$", "$\pi$")
     )
-
-    result_min = minimize(
-        lambda x: x[0] ** 2 + x[1] ** 2 - x[0] * x[1] + x[0] + x[1],
-        (-1, -2),
-        method='SLSQP',
-        constraints=cons
-    )
-    result_max = minimize(
-        lambda x: -(x[0] ** 2 + x[1] ** 2 - x[0] * x[1] + x[0] + x[1]),
-        (-1, -2),
-        method='SLSQP',
-        constraints=cons
-    )
-
-    print(f'Punkt: {result_min.x}, Wartosc min:{result_min.fun}')
-    print(f'Punkt: {result_max.x}, Wartosc max:{-result_max.fun}')
-
-    t2 = time.time()
-    print(f'Exercise 2 ----------DONE----------- [TIME: {t2 - t1}s]')
-    return result_min.fun, -result_max.fun
-
-
-def exercise3():
-    print("Exercise 3 ---------Started---------")
-    t1 = time.time()
-
-    cons = (
-        {'type': 'ineq', 'fun': lambda x: 4 - x[0] ** 2 - x[1] ** 2}
-    )
-
-    result_min = minimize(
-        lambda x: -((4 - x[0] ** 2 - x[1] ** 2) ** 1 / 2),
-        (1, 1),
-        method='SLSQP',
-        constraints=cons
-    )
-
-    result_max = minimize(
-        lambda x: (4 - x[0] ** 2 - x[1] ** 2) ** 1 / 2,
-        (1, 1),
-        method='SLSQP',
-        constraints=cons
-    )
-
-    print(f'Punkt: {result_min.x}, Wartosc min:{result_min.fun}')
-    print(f'Punkt: {result_max.x}, Wartosc max:{-result_max.fun}')
-
-    t2 = time.time()
-    print(f'Exercise 3 ----------DONE----------- [TIME: {t2 - t1}s]')
-    return result_min.fun, -result_max.fun
-
-
-def exercise4():
-    print("Exercise 4 ---------Started---------")
-    t1 = time.time()
-
-    f, g, h = lambda arg: -arg + 1, lambda arg: arg ** 2 - 1, lambda arg: np.sin(arg)
-
-    x0 = fsolve(lambda arg: g(arg) - h(arg), [-0.5])
-    x1 = fsolve(lambda arg: f(arg) - h(arg), [0.5])
-    x2 = fsolve(lambda arg: f(arg) - g(arg), [0.5])
-
-    int_step = 0.001
-    xx1, xx2 = np.arange(x0, x1, int_step), np.arange(x1, x2, int_step)
-
-    A = trapz(h(xx1) - g(xx1), xx1, int_step) + trapz(f(xx2) - g(xx2), xx2, int_step)
-
-    C = trapz(
-        (h(xx1) + g(xx1)) / 2 * (h(xx1) - g(xx1)), xx1, int_step
-    ) + trapz(
-        (f(xx2) + g(xx2)) / 2 * (f(xx2) - g(xx2)), xx2, int_step
-    )
-
-    y_cm = 1 / A * C
-
-    print("Moment centralny: " + str(y_cm))
-
-    t2 = time.time()
-    print(f'Exercise 4 ----------DONE----------- [TIME: {t2 - t1}s]')
-    return y_cm
-
-
-def exercise5():
-    print("Exercise 5 ---------Started---------")
-    T1 = time.time()
-
-    print("Dane 2D ---------Started---------")
-    t1 = time.time()
-    M = np.loadtxt('dane_2D.txt')
-    centroid_2d, label_2d = kmeans2(M, 2)
-    print(centroid_2d)
-
-    plt.scatter(M[:, 0], M[:, 1], marker='o', c=label_2d)
-    plt.plot(centroid_2d[:, 0], centroid_2d[:, 1], 'g*')
-    plt.title("dane_2D.txt")
+    plt.yticks((-1, 0, 1))
     plt.show()
-    t2 = time.time()
-    print(f'Dane 2D ----------DONE----------- [TIME: {t2 - t1}s]')
 
-    print("Dane 3D ---------Started---------")
-    t1 = time.time()
-    M = np.loadtxt('dane_3D.txt')
-    centroid_3d, label_3d = kmeans2(M, 3)
-    print(centroid_3d)
 
+def exercise_2():
+    print("Started ---------Exercise 2---------")
+    b_dots, r_dots = [], []
+    coords = np.random.rand(1024, 2) * 1.0
+
+    for i in range(len(coords)):
+        a, a_1 = coords[i][1] < 0.33, coords[i][0] > 0.33
+        b, b_1 = coords[i][1] > 0.66, coords[i][0] < 0.66
+        c, c_1 = coords[i][0] < 0.33, coords[i][1] > 0.33
+        d, d_1 = coords[i][0] > 0.66, coords[i][1] < 0.66
+        if (c and (a or b)) or (d and (a or b)) or ((a_1 and b_1) and (c_1 and d_1)):
+            b_dots.append(coords[i])
+        else:
+            r_dots.append(coords[i])
+
+    b_dots, r_dots = np.array(b_dots), np.array(r_dots)
+
+    plt.scatter(b_dots[:, 0], b_dots[:, 1], color="b", alpha=0.7)
+    plt.scatter(r_dots[:, 0], r_dots[:, 1], color="r", alpha=0.7)
+
+    plt.show()
+
+
+def exercise_3():
+    print("Started ---------Exercise 3---------")
+    r_v = [2, 2.5, 3, 3.5, 4, 4.5, 5]
+    r = np.random.choice(r_v, size=100)
+
+    ax = plt.gca()
+    ax.yaxis.set_major_locator(MaxNLocator(integer=True))
+    counts, _, _ = plt.hist(r, bins=len(r_v), rwidth=0.75, color='g', range=(1.75, 5.25))
+
+    for i in range(len(r_v)):
+        plt.annotate(
+            str(int(counts[i])), xy=(r_v[i], counts[i]), xytext=(0, 3),
+            textcoords='offset points', va='bottom', ha='center'
+        )
+
+    plt.xlabel('Oceny')
+    plt.ylabel('Liczba ocen')
+    plt.show()
+
+
+def exercise_4():
+    print("Started ---------Exercise 4---------")
+    x = np.arange(-2, 2, 0.01)
+
+    y1 = -x + 1
+    y2 = x ** 2 - 1
+    y3 = np.sin(x)
+
+    plt.plot(x, y1, 'r',
+             x, y2, 'g',
+             x, y3, 'b')
+
+    plt.fill_between(
+        x, np.minimum(y1, y3), y2, where=np.minimum(y1, y3) > y2,
+        hatch='.', color='orange', alpha=0.7
+    )
+    plt.legend(['$y < - x + 1$', '$y > x^2 - 1$', '$y < sin(x)$'])
+    ax = plt.gca()
+    ax.set_ylim((-2, 2))  # limits for y axes
+    plt.show()
+
+
+def exercise_5():
+    print("Started ---------Exercise 5---------")
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
-    ax.scatter(M[:, 0], M[:, 1], M[:, 2], marker='o', c=label_3d)
-    ax.plot(centroid_3d[:, 0], centroid_3d[:, 1], centroid_3d[:, 2], 'g*')
-    plt.title("dane_3D.txt")
-    plt.show()
-    t2 = time.time()
-    print(f'Dane 3D ----------DONE----------- [TIME: {t2 - t1}s]')
+    x, y = np.meshgrid(np.linspace(-2, 2, 50), np.linspace(-2, 2, 50))
 
-    T2 = time.time()
-    print(f'Exercise 5 ----------DONE----------- [TIME: {T2 - T1}s]')
-    return centroid_2d, centroid_3d
+    z1 = (1 / (1 + np.e ** (-x - y))) * (x + y >= 0)
+    z2 = 0.5 * (x + y < 0)
+    z = z1 + z2
+
+    ax.plot_surface(x, y, z, rstride=1, cstride=1, cmap='jet', alpha=0.8)
+    plt.show()
+
+
+def exercise_6():
+    print("Started ---------Exercise 6---------")
+    k, a_val = 200, [2, 2.9, 3, 3.56, 3.6]
+    p, q = np.zeros((k, 1)), np.zeros((k, 1))
+    p[0], q[0] = 0.1, 0.0001
+
+    fig, ax = plt.subplots(5, 1)
+    fig.set_size_inches(8.6, 6.5)
+    for item, axes in enumerate(ax):
+        a = a_val[item]
+        axes.set_title(f"a: {a}")
+        for i in range(1, k):
+            p[i] = a * p[i - 1] * (1 - p[i - 1])
+            q[i] = a * q[i - 1] * (1 - q[i - 1])
+        axes.plot(np.arange(k), p, 'r')
+        axes.plot(np.arange(k), q, 'g')
+        axes.plot(np.arange(k), np.abs(p - q), 'b')
+    plt.subplots_adjust(hspace=1.0)
+    plt.show()
 
 
 if __name__ == "__main__":
-    print(f'result: \n{exercise1()}')
-    print(f'result: \n{exercise2()}')
-    print(f'result: \n{exercise3()}')
-    print(f'result: \n{exercise4()}')
-    exercise5 = exercise5()
-    print(f'result: \n{exercise5[0]}\n{exercise5[1]}')
+    exercise_1()
+    exercise_2()
+    exercise_3()
+    exercise_4()
+    exercise_5()
+    exercise_6()

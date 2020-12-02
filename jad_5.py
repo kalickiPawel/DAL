@@ -1,44 +1,94 @@
-import pandas as pd
+from scipy.spatial import KDTree
 import numpy as np
 
-from scipy.io import arff
+
+def interpolate_knn(xi, x, y, k):
+    """
+    Funkcja interpolująca, oparta na metodzie k najbliższych sąsiadów
+    :param xi: wartość, dla której chcemy dokonać interpolacji
+    :param x: macierz argumentówwęzłów interpolacji
+    :param y: wektor wartości węzłów interpolacji
+    :param k: liczba uwzględnianych sąsiadów
+    :return: średnia arytmetyczna z wartości y dla k najbliższych sąsiadów
+    """
+    tree = KDTree(x)
+    res = tree.query(xi, k)
+
+    s = 0
+    for i in res[1]:
+        s += y[i]
+    return s / len(res[1])
+
+
+def klasyfikuj_kNN(x, xc, yc, k):
+    """
+    Klasyfikator, oparty na metodzie k najbliższych sąsiadów
+    :param x: wartość, dla której chcemy dokonać klasyfikacji
+    :param xc: macierz atrybutów wejściowych danych uczących
+    :param yc: wektor klas zadanych
+    :param k: liczba uwzględnianych sąsiadów
+    :return: najczęstsza klasa spośród k najbliższych sąsiadów
+    """
+    tree = KDTree(xc)
+    res = tree.query(x, k)
+    u, count = np.unique(np.unique(yc[res[1]]), return_counts=True)
+    idx = np.argmax(count)
+    return u[idx]
+
+
+def walidacja(X, Y):
+    """
+    Funkcja klasyfikatora, która dobierze optymalną
+    dla określonego zbioru danych liczbę k sąsiadów,
+    za pomocą kroswalidacji metodą minus jednego elementu.
+    :param X: zbiór wejściowy
+    :param Y: zbiór wyjściowy
+    :return: optymalna liczba k sąsiadów,
+    :return: dokładność z jaką została dobrana warość,
+    :return: pozostałe wyniki
+    """
+    best_value, best_k, results = 0.0, 0, []
+    k_list = (1, 3, 7, 9, 27)
+    for k in k_list:
+        true_predictions = 0
+        for i in range(X.shape[0]):
+            X_train, Y_train = np.delete(X, obj=i, axis=0), np.delete(Y, obj=i, axis=0)
+            X_test, Y_test = X[i, :], Y[i]
+            predicted = klasyfikuj_kNN(X_test, X_train, Y_train, k)
+            if predicted == Y_test:
+                true_predictions += 1
+        result = true_predictions / X.shape[0]
+        results.append(result)
+        if result > best_value:
+            best_value = result
+            best_k = k
+    return best_k, best_value, results
+
 
 if __name__ == "__main__":
     '''
-        Zadanie 1
+    ------------Zadanie 1--------------
     '''
-    n_bar, n_sd, n = 0, 1, 1000
-    df = pd.DataFrame(
-        dict(
-            a=np.random.normal(loc=n_bar, scale=n_sd, size=n),
-            b=np.random.normal(loc=n_bar, scale=n_sd, size=n),
-            c=np.random.normal(loc=n_bar, scale=n_sd, size=n),
-            d=np.random.normal(loc=n_bar, scale=n_sd, size=n)
-        ),
-        columns=['a', 'b', 'c', 'd']
-    )
-    # print(df)
-    # 1.a
-    print(f'Ilosc elementów o wartosciach spoza przedzialu [−2,2]: {df[(df < -2) | (df > 2)].count().sum()}')
-    # 1.b
-    print(f'Ilosc elementów o wartościach spoza przedziału [−2,2] w każdej kolumnie:\n{df[(df < -2) | (df > 2)].count()}')
-    # 1.c
-    print(df.applymap(lambda x: None if x < -2 or x > 2 else x).dropna())
-    # 1.d
-    print(df.applymap(lambda x: x**2 if x < 0 else x))
+    x = np.loadtxt("./data/dane3d_i.txt")
+    y = np.loadtxt("./data/dane3d_o.txt")
+    xi, k = (5, 7), 3
+    yi = interpolate_knn(xi, x, y, k)
+    print(f"Średnia arytmetyczna z wartości y dla {k} najbliższych sąsiadówy wynosi: {yi}")
 
     '''
-        Zadanie 2
+    ------------Zadanie 2--------------
     '''
-    filename = './data/soybean.arff'
-    data, meta = arff.loadarff(filename)
-    df1 = pd.DataFrame(data).select_dtypes([np.object]).stack().str.decode('utf-8').unstack()
-    print(f'Probek w pliku: {df1.shape[0]}')
-    # 2.a
-    print(f"Próbek z brakujace wartosci: {df1.shape[0] - df1[df1 != '?'].dropna().shape[0]}")
-    # 2.b
-    print(f"Lista ilosci brakujacych wartosci:\n{np.vstack((np.unique((df1 == '?').sum(axis=1), return_counts=True)))}")
-    # 2.c
-    c = df1[df1 == '?'].count()
-    print(f'Ile kolumn z brakujacymi wartosciami:\n{c[c >= 1].count()}')
-    print(f"Kolumny gdzie występują brakujące wartości:\n{c[c >= 1]}")
+    xc = np.loadtxt("./data/dane_3D_kapitan_i.txt")
+    yc = np.loadtxt("./data/dane_3D_kapitan_o.txt")
+    x, k = (-21.18, -3.9, -7.3), 3
+    klasa = klasyfikuj_kNN(x, xc, yc, k)
+    print(f"Wartość najczęstszej klasy spośród {k} najbliższych sąsiadów: {klasa}")
+
+    '''
+    ------------Zadanie 3--------------
+    '''
+    x = np.loadtxt('data/dane_8D_diabet_i.txt')
+    y = np.loadtxt('data/dane_8D_diabet_o.txt')
+    best_k, best_score, scores = walidacja(x, y)
+    print(f"Najlepszy parametr k: {best_k} z dokładnością {best_score}")
+    print("Wyniki: ", scores)

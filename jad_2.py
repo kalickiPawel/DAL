@@ -1,128 +1,134 @@
 import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib.ticker import MaxNLocator
+import time
 
 
-def exercise_1():
-    print("Started ---------Exercise 1---------")
-    x = np.linspace(-np.pi, np.pi, 200)
-    f1 = np.cos(x)
-    f2 = np.sign(x)
-    plt.plot(x, f1, 'k')
-    plt.plot(x, f2, 'r')
-    plt.legend(['f(x) = cos(x)', 'g(x) = sign(x)'])
-    plt.xticks(
-        (-np.pi, -np.pi / 2, 0, np.pi / 2, np.pi),
-        ("$-\pi$", "$-\\frac{\pi}{2}$", 0, "$\\frac{\pi}{2}$", "$\pi$")
-    )
-    plt.yticks((-1, 0, 1))
-    plt.show()
+def exercise1(input_matrix, offset_to_add):
+    """
+    This function adding the offset into declared input matrix
+    :param input_matrix: <class 'numpy.ndarray'>
+    :param offset_to_add: <class 'int'>
+    :return: <class 'numpy.ndarray'> -> new matrix with offset
+    """
+    return np.vstack((
+        np.zeros((offset_to_add, input_matrix.shape[1] + 2 * offset_to_add)),
+        np.hstack((
+            np.zeros((input_matrix.shape[0], offset_to_add)),
+            input_matrix,
+            np.zeros((input_matrix.shape[0], offset_to_add)))),
+        np.zeros((offset_to_add, input_matrix.shape[1] + 2 * offset_to_add))
+    ))
 
 
-def exercise_2():
-    print("Started ---------Exercise 2---------")
-    b_dots, r_dots = [], []
-    coords = np.random.rand(1024, 2) * 1.0
-
-    for i in range(len(coords)):
-        a, a_1 = coords[i][1] < 0.33, coords[i][0] > 0.33
-        b, b_1 = coords[i][1] > 0.66, coords[i][0] < 0.66
-        c, c_1 = coords[i][0] < 0.33, coords[i][1] > 0.33
-        d, d_1 = coords[i][0] > 0.66, coords[i][1] < 0.66
-        if (c and (a or b)) or (d and (a or b)) or ((a_1 and b_1) and (c_1 and d_1)):
-            b_dots.append(coords[i])
-        else:
-            r_dots.append(coords[i])
-
-    b_dots, r_dots = np.array(b_dots), np.array(r_dots)
-
-    plt.scatter(b_dots[:, 0], b_dots[:, 1], color="b", alpha=0.7)
-    plt.scatter(r_dots[:, 0], r_dots[:, 1], color="r", alpha=0.7)
-
-    plt.show()
+# def exercise1_1(a, offset):
+#     '''
+#     Alternative version exercise 1
+#     '''
+#     result = np.zeros((offset*2 + a.shape[0], offset*2 + a.shape[1]))
+#     result[offset:a.shape[0]+offset, offset:a.shape[1]+offset] = a
+#     return result
 
 
-def exercise_3():
-    print("Started ---------Exercise 3---------")
-    r_v = [2, 2.5, 3, 3.5, 4, 4.5, 5]
-    r = np.random.choice(r_v, size=100)
+def exercise2(n):
+    """
+    This function generates an output matrix with spiral values
+    :param n: <class 'int'>
+    :return: <class 'numpy.ndarray'> -> new spiral values matrix
+    """
+    result = np.zeros((n, n))
+    w, k, i = n - 1, 0, 1
 
-    ax = plt.gca()
-    ax.yaxis.set_major_locator(MaxNLocator(integer=True))
-    counts, _, _ = plt.hist(r, bins=len(r_v), rwidth=0.75, color='g', range=(1.75, 5.25))
+    while True:
+        while w - 1 >= 0 and result[w - 1, k] == 0:
+            result[w, k] = i
+            w, i = w - 1, i + 1
+        if i >= n ** 2:
+            break
 
-    for i in range(len(r_v)):
-        plt.annotate(
-            str(int(counts[i])), xy=(r_v[i], counts[i]), xytext=(0, 3),
-            textcoords='offset points', va='bottom', ha='center'
-        )
+        while k + 1 < n and result[w, k + 1] == 0:
+            result[w, k] = i
+            k, i = k + 1, i + 1
+        if i >= n ** 2:
+            break
 
-    plt.xlabel('Oceny')
-    plt.ylabel('Liczba ocen')
-    plt.show()
+        while w + 1 < n and result[w + 1, k] == 0:
+            result[w, k] = i
+            w, i = w + 1, i + 1
+        if i >= n ** 2:
+            break
 
+        while k - 1 >= 0 and result[w, k - 1] == 0:
+            result[w, k] = i
+            k, i = k - 1, i + 1
+        if i >= n ** 2:
+            break
 
-def exercise_4():
-    print("Started ---------Exercise 4---------")
-    x = np.arange(-2, 2, 0.01)
-
-    y1 = -x + 1
-    y2 = x ** 2 - 1
-    y3 = np.sin(x)
-
-    plt.plot(x, y1, 'r',
-             x, y2, 'g',
-             x, y3, 'b')
-
-    plt.fill_between(
-        x, np.minimum(y1, y3), y2, where=np.minimum(y1, y3) > y2,
-        hatch='.', color='orange', alpha=0.7
-    )
-    plt.legend(['$y < - x + 1$', '$y > x^2 - 1$', '$y < sin(x)$'])
-    ax = plt.gca()
-    ax.set_ylim((-2, 2))  # limits for y axes
-    plt.show()
+    result[w, k] = i
+    return result
 
 
-def exercise_5():
-    print("Started ---------Exercise 5---------")
-    fig = plt.figure()
-    ax = fig.add_subplot(111, projection='3d')
-    x, y = np.meshgrid(np.linspace(-2, 2, 50), np.linspace(-2, 2, 50))
+def exercise3(input_matrix, notch):
+    """
+    This function notch the values from smaller than -notch and greater than notch.
+    Values are changed to 0 but when values are between -notch and notch are changed to 1.
+    :param input_matrix: <class 'numpy.ndarray'>
+    :param notch: <class 'int'>
+    :return: <class 'numpy.ndarray'> -> new matrix with 0s and 1s
+    """
+    result = np.zeros(input_matrix.shape)
+    result[(input_matrix < -notch) | (matrix > notch)] = 1
+    return result
 
-    z1 = (1 / (1 + np.e ** (-x - y))) * (x + y >= 0)
-    z2 = 0.5 * (x + y < 0)
-    z = z1 + z2
 
-    ax.plot_surface(x, y, z, rstride=1, cstride=1, cmap='jet', alpha=0.8)
-    plt.show()
+def exercise4(input_matrix, notch):
+    """
+    This function notch the rows where are values smaller than -notch and greater than notch.
+    :param input_matrix: <class 'numpy.ndarray'>
+    :param notch: <class 'int'>
+    :return: <class 'numpy.ndarray'> -> new matrix without rows with values in range from -notch to notch.
+    """
+    return input_matrix[np.all((input_matrix >= -notch) & (input_matrix <= notch), axis=1)]
 
 
-def exercise_6():
-    print("Started ---------Exercise 6---------")
-    k, a_val = 200, [2, 2.9, 3, 3.56, 3.6]
-    p, q = np.zeros((k, 1)), np.zeros((k, 1))
-    p[0], q[0] = 0.1, 0.0001
-
-    fig, ax = plt.subplots(5, 1)
-    fig.set_size_inches(8.6, 6.5)
-    for item, axes in enumerate(ax):
-        a = a_val[item]
-        axes.set_title(f"a: {a}")
-        for i in range(1, k):
-            p[i] = a * p[i - 1] * (1 - p[i - 1])
-            q[i] = a * q[i - 1] * (1 - q[i - 1])
-        axes.plot(np.arange(k), p, 'r')
-        axes.plot(np.arange(k), q, 'g')
-        axes.plot(np.arange(k), np.abs(p - q), 'b')
-    plt.subplots_adjust(hspace=1.0)
-    plt.show()
+def exercise5(*input_matrices):
+    """
+    This function return vector of unique values from any quantity of matrices
+    :param input_matrices: <class 'tuple'>
+    :return:<class 'numpy.ndarray'> -> vector with unique matrices values
+    """
+    result = []
+    for m in input_matrices:
+        result = np.concatenate((result, np.ravel(m)))
+    result = np.unique(result)
+    return result
 
 
 if __name__ == "__main__":
-    exercise_1()
-    exercise_2()
-    exercise_3()
-    exercise_4()
-    exercise_5()
-    exercise_6()
+    print("--------------Exercise_1--------------")
+    matrix = np.ones((4, 5))
+    offset = 2
+    print(f"Input: \n{matrix}")
+    print(f"Output: \n{exercise1(matrix, offset)}")
+    # exercise1_1(a, offset)
+
+    print("--------------Exercise_2--------------")
+    n = 5
+    print(exercise2(n))
+
+    print("--------------Exercise_3--------------")
+    a = 2
+    matrix = np.random.randint(-8, 5, (5, 3))
+    print(f"Input: \n{matrix}")
+    print(f"Output: \n{exercise3(matrix, a)}")
+
+    print("--------------Exercise_4--------------")
+    a = 2
+    matrix = np.random.randint(-8, 5, (5, 3))
+    print(f"Input: \n{matrix}")
+    print(f"Output: \n{exercise4(matrix, a)}")
+
+    print("--------------Exercise_5--------------")
+    M, N = np.random.randint(-5, 10, (2, 3)), np.random.randint(-30, -20, (4, 2))
+    O, P = np.random.randint(15, 30, (3, 2)), np.random.randint(15, 30, (4, 5))
+    print(f"Input 1.: \n{M}\nInput 2.: \n{N}\nInput 3.: \n{O}\nInput 4.: \n{P}")
+    print(f"Output: \n{exercise5(M, N, O, P)}")
+    print(type(exercise5(M, N, O, P)))
