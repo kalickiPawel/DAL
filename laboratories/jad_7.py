@@ -51,12 +51,13 @@ class SeventhLab:
         df_new = self.df
 
         while rs_max != 1.0:
-            df_nconf = df_new.drop_duplicates(subset=lst, keep=False)  # niesprzeczne
+            df_nconf = df_new.drop_duplicates(subset=lst, keep=False)  # consistent
 
             gamma_all = len(df_nconf) / len(df_new)
-            print(f"Gamma dla wszystkich: {gamma_all}")
+            print(f"Gamma for all: {gamma_all}")
 
-            df_nconf_list = [df_new.drop_duplicates(subset=list(x), keep=False) for x in combinations(lst, len(lst) - 1)]
+            df_nconf_list = [df_new.drop_duplicates(subset=list(x), keep=False)
+                             for x in combinations(lst, len(lst) - 1)]
 
             gammas = [len(el) / len(self.df) for el in df_nconf_list]
             for i, gamma in enumerate(gammas):
@@ -71,20 +72,20 @@ class SeventhLab:
             print(lst)
             rs_max = max(rs)
 
-        print(f"-----\nRedukt: {lst}")
+        print(f"-----\nReducer: {lst}")
 
     def exercise_06(self):
-        df_pewne = self.df.drop_duplicates()  # -> if not duplicates
+        df_certainty = self.df.drop_duplicates()  # -> if not duplicates
         # print(df.duplicated().value_counts())
         # print(df)
-        # df_sprzeczne = 0 # -> if duplicates.num ??
-        # df_niepewne = 0 # -> if duplicates.num ??
+        # df_conflict = 0 # -> if duplicates.num ??
+        # df_uncertainty = 0 # -> if duplicates.num ??
 
         # -- Ideas -- #
         # df2 = df.drop(["windy"], axis=1)
-        # df_nconf2 = df2.drop_duplicates(subset=['temperature', 'humidity', 'play'], keep=False)  # niesprzeczne
+        # df_nconf2 = df2.drop_duplicates(subset=['temperature', 'humidity', 'play'], keep=False)  # consistent
         # gamma_all2 = len(df_nconf2) / len(df2)
-        # print(f"Gamma dla wszystkich: {gamma_all2}")
+        # print(f"Gamma for all: {gamma_all2}")
         #
         # lst2 = ['temperature', 'humidity', 'play']
         #
@@ -98,9 +99,9 @@ class SeventhLab:
         #     print(f"R x{i}: {r}")
         #
         # df3 = df2.drop(["play"], axis=1)
-        # df_nconf3 = df3.drop_duplicates(subset=['temperature', 'humidity'], keep=False)  # niesprzeczne
+        # df_nconf3 = df3.drop_duplicates(subset=['temperature', 'humidity'], keep=False)  # consistent
         # gamma_all3 = len(df_nconf3) / len(df3)
-        # print(f"Gamma dla wszystkich: {gamma_all3}")
+        # print(f"Gamma for all: {gamma_all3}")
         #
         # lst3 = ['temperature', 'humidity']
         #
@@ -113,6 +114,6 @@ class SeventhLab:
         # for i, r in enumerate(rs3):
         #     print(f"R x{i}: {r}")
 
-        # data_frame_1 = 0 # -> sprzeczne -> if duplicates.num ??
-        # data_frame_2 = 0 # -> niepewne -> if duplicates.num ??
-        # data_frame_3 = 0 # -> pewne -> if not duplicates
+        # data_frame_1 = 0 # -> conflict -> if duplicates.num ??
+        # data_frame_2 = 0 # -> uncertainty -> if duplicates.num ??
+        # data_frame_3 = 0 # -> certainty -> if not duplicates
