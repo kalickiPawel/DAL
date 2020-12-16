@@ -24,7 +24,7 @@ class FourthLab:
 
     @staticmethod
     def exercise1():
-        print("Exercise 1 ---------Started---------")
+        print("~~~~~~~~~~~~~~~~~~~~~~~Exercise 1~~~~~~~~~~~~~~~~~~~~")
         t1 = time.time()
         x, y, z = symbols('x y z')
         eq1 = Eq(5 * (x ** -1) - 2 * (y ** -1) + 3 * (z ** -1), (-9 / 4))
@@ -33,12 +33,12 @@ class FourthLab:
 
         print(f'{eq1}\n{eq2}\n{eq3}')
         t2 = time.time()
-        print(f'Exercise 1 ----------DONE----------- [TIME: {t2 - t1}s]')
+        print(f"~Exercise 1~~~~~~~~~~DONE~~~~~~~~~~[TIME: {t2 - t1}s]")
         return solve((eq1, eq2, eq3), (x, y, z))
 
     @staticmethod
     def exercise2():
-        print("Exercise 2 ---------Started---------")
+        print("~~~~~~~~~~~~~~~~~~~~~~~Exercise 2~~~~~~~~~~~~~~~~~~~~")
         t1 = time.time()
 
         cons = (
@@ -64,12 +64,12 @@ class FourthLab:
         print(f'Point: {result_max.x}, Value max:{-result_max.fun}')
 
         t2 = time.time()
-        print(f'Exercise 2 ----------DONE----------- [TIME: {t2 - t1}s]')
+        print(f"~Exercise 2~~~~~~~~~~DONE~~~~~~~~~~[TIME: {t2 - t1}s]")
         return result_min.fun, -result_max.fun
 
     @staticmethod
     def exercise3():
-        print("Exercise 3 ---------Started---------")
+        print("~~~~~~~~~~~~~~~~~~~~~~~Exercise 3~~~~~~~~~~~~~~~~~~~~")
         t1 = time.time()
 
         cons = (
@@ -94,12 +94,12 @@ class FourthLab:
         print(f'Point: {result_max.x}, Value max:{-result_max.fun}')
 
         t2 = time.time()
-        print(f'Exercise 3 ----------DONE----------- [TIME: {t2 - t1}s]')
+        print(f"~Exercise 3~~~~~~~~~~DONE~~~~~~~~~~[TIME: {t2 - t1}s]")
         return result_min.fun, -result_max.fun
 
     @staticmethod
     def exercise4():
-        print("Exercise 4 ---------Started---------")
+        print("~~~~~~~~~~~~~~~~~~~~~~~Exercise 4~~~~~~~~~~~~~~~~~~~~")
         t1 = time.time()
 
         f, g, h = lambda arg: -arg + 1, lambda arg: arg ** 2 - 1, lambda arg: np.sin(arg)
@@ -124,17 +124,17 @@ class FourthLab:
         print("Central moment: " + str(y_cm))
 
         t2 = time.time()
-        print(f'Exercise 4 ----------DONE----------- [TIME: {t2 - t1}s]')
+        print(f"~Exercise 4~~~~~~~~~~DONE~~~~~~~~~~[TIME: {t2 - t1}s]")
         return y_cm
 
     @staticmethod
     def exercise5():
         data2d_path = os.path.join(root, os.path.join('data', 'dane_2D.txt'))
         data3d_path = os.path.join(root, os.path.join('data', 'dane_3D.txt'))
-        print("Exercise 5 ---------Started---------")
+        print("~~~~~~~~~~~~~~~~~~~~~~~Exercise 5~~~~~~~~~~~~~~~~~~~~")
         t1_main = time.time()
 
-        print("Dane 2D ---------Started---------")
+        print("~~~~~~~~~~~~~~~~~~~Exercise 5 DATA 2D~~~~~~~~~~~~~~~~")
         t1 = time.time()
         m = np.loadtxt(data2d_path)
         centroid_2d, label_2d = kmeans2(m, 2)
@@ -145,9 +145,9 @@ class FourthLab:
         plt.title(data2d_path)
         plt.show()
         t2 = time.time()
-        print(f'Dane 2D ----------DONE----------- [TIME: {t2 - t1}s]')
+        print(f"~Exercise 5 DATA 2D~~~~~~DONE~~~~~~[TIME: {t2 - t1}s]")
 
-        print("Dane 3D ---------Started---------")
+        print("~~~~~~~~~~~~~~~~~~~Exercise 5 DATA 3D~~~~~~~~~~~~~~~~")
         t1 = time.time()
         m = np.loadtxt(data3d_path)
         centroid_3d, label_3d = kmeans2(m, 3)
@@ -160,8 +160,8 @@ class FourthLab:
         plt.title(data3d_path)
         plt.show()
         t2 = time.time()
-        print(f'Dane 3D ----------DONE----------- [TIME: {t2 - t1}s]')
+        print(f"~Exercise 5 DATA 3D~~~~~~DONE~~~~~~[TIME: {t2 - t1}s]")
 
         t2_main = time.time()
-        print(f'Exercise 5 ----------DONE----------- [TIME: {t2_main - t1_main}s]')
+        print(f"~Exercise 4~~~~~~~~~~DONE~~~~~~~~~~[TIME: {t2_main - t1_main}s]")
         return centroid_2d, centroid_3d
