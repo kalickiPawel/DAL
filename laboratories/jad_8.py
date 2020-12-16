@@ -13,13 +13,13 @@ class EighthLab:
     df = None
 
     def __init__(self):
+        self.filename = os.path.join(root, os.path.join('data', 'stock.arff'))
         self.exercise_01()
         df = self.exercise_02()
         print(df)
         self.exercise_03(df)
 
     def exercise_01(self):
-        self.filename = os.path.join(root, os.path.join('data', 'stock.arff'))
         data, meta = arff.loadarff(self.filename)
         self.df = pd.DataFrame(data)
 
