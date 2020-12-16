@@ -1,6 +1,7 @@
-from laboratories import FirstLab, SecondLab, ThirdLab
+from laboratories import FirstLab, SecondLab, ThirdLab, FourthLab
 
 if __name__ == "__main__":
     lab1 = FirstLab()
     lab2 = SecondLab()
     lab3 = ThirdLab()
+    lab4 = FourthLab()
