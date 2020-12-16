@@ -2,12 +2,12 @@ from laboratories.RationalNumber import RationalNumber
 
 
 class FirstLab:
-    # L = Liczba_wymierna(-3, 32, 64)
+    # L = RationalNumber(-3, 32, 64)
     L = RationalNumber(3, 0, 0)
 
     def __init__(self):
         print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-        print("~~~~~~~~~~~~~~~~~~~Laboratoria nr 1~~~~~~~~~~~~~~~~~~")
+        print("~~~~~~~~~~~~~~~~~~~Laboratory No. 1~~~~~~~~~~~~~~~~~~")
         self.exercise_01()
         self.exercise_02()
         self.exercise_03(
@@ -51,73 +51,73 @@ class FirstLab:
 
     def exercise_01(self):
         print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-        print("1. Wyswietlanie liczby")
-        print("Liczba: {}".format(self.L))
+        print("1. Display number")
+        print("Number: {}".format(self.L))
 
     def exercise_02(self):
         print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-        print("2. Zwracanie formy reprezentacyjnej")
-        print("Forma reprezentacyjna: {}".format(repr(self.L)))
+        print("2. Return a representative form")
+        print("Representative form: {}".format(repr(self.L)))
 
     @staticmethod
     def exercise_03(l1, l2):
         print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-        print("3. Porownywanie liczb")
+        print("3. Comparison of numbers")
 
-        print("Czy liczby: {}{} \nsa rowne?: {}".format(
-            "\n\t Liczba 1.: {}".format(l1),
-            "\n\t Liczba 2.: {}".format(l2),
-            'Tak' if l1 == l2 else 'Nie'))
+        print("Are numbers: {}{} \nequal?: {}".format(
+            "\n\t Number 1.: {}".format(l1),
+            "\n\t Number 2.: {}".format(l2),
+            'Yes' if l1 == l2 else 'No'))
 
-        print("Czy 1. liczba z podanych ponizej: {}{} \njest wieksza?: {}".format(
-            "\n\t Liczba 1.: {}".format(l1),
-            "\n\t Liczba 2.: {}".format(l2),
-            'Tak' if l1 > l2 else 'Nie'))
+        print("Is 1. number from below: {}{} \nis greater than: {}?".format(
+            "\n\t Number 1.: {}".format(l1),
+            "\n\t Number 2.: {}".format(l2),
+            'Yes' if l1 > l2 else 'No'))
 
     @staticmethod
     def exercise_04(l1, l2, abs_state=False):
         print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-        print("4. Wykonywanie podstawowych operacji arytmetycznych: \n"
-              "dodawania, odejmowania, mnozenia, dzielenia, potegowania, "
-              "wartosci bezwzglednej")
+        print("4. Performing basic arithmetic operations: \n"
+              "addition, subtraction, multiplication, division, factorization, "
+              "absolute value")
         if abs_state:
-            print("\nOperacja abs:\n")
+            print("\nOperation abs:\n")
             print("{} -> {}".format(l1, abs(l1)))
             print("{} -> {}".format(l2, abs(l2)))
         else:
-            print("Operacje sa wykonywane dla dwoch liczb: \n\t{}\n\t{}".format(l1, l2))
-            print("Dodawanie: {}".format(l1 + l2))
-            print("Odejmowanie: {}".format(l1 - l2))
-            print("Mnozenie: {}".format(l1 * l2))
-            print("Dzielenie: {}".format(l1 / l2))
-            print("Potegowanie: {}".format(l1 ** 2))
+            print("Operations are performed for two numbers: \n\t{}\n\t{}".format(l1, l2))
+            print("Addition: {}".format(l1 + l2))
+            print("Subtraction: {}".format(l1 - l2))
+            print("Multiplication: {}".format(l1 * l2))
+            print("Division: {}".format(l1 / l2))
+            print("Factorization: {}".format(l1 ** 2))
 
     def exercise_05(self):
         print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-        print("5. Wyswietlenie formy ulamka niewlasciwego")
-        print("Ulamek niewlasciwy: {}/{}".format(*self.L.get_complex_fraction()))
+        print("5. Display improper fraction form")
+        print("Improper fraction: {}/{}".format(*self.L.get_complex_fraction()))
 
     @staticmethod
     def exercise_06(l1, l2, l3, l4, op_type):
         print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-        print("6. Konwersja do typow: bool, int, float")
+        print("6. Type conversion: bool, int, float")
 
         if op_type == 'bool':
-            print("\nKonwersja na bool:\n")
+            print("\nConversion to bool:\n")
             print("{} -> {}".format(l1, bool(l1)))
             print("{} -> {}".format(l2, bool(l2)))
             print("{} -> {}".format(l3, bool(l3)))
             print("{} -> {}".format(l3, bool(l4)))
 
         if op_type == 'int':
-            print("\nKonwersja na int:\n")
+            print("\nConversion to int:\n")
             print("{} -> {}".format(l1, int(l1)))
             print("{} -> {}".format(l2, int(l2)))
             print("{} -> {}".format(l3, int(l3)))
             print("{} -> {}".format(l4, int(l4)))
 
         if op_type == 'float':
-            print("\nKonwersja na float:\n")
+            print("\nConversion to float:\n")
             print("{} -> {}".format(l1, float(l1)))
             print("{} -> {}".format(l2, float(l2)))
             print("{} -> {}".format(l3, float(l3)))
@@ -126,5 +126,5 @@ class FirstLab:
     @staticmethod
     def exercise_07(l1):
         print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-        print("7. Zaokraglanie za pomoca funkcji: round.")
-        print("Zaokraglana do 1 liczba: {}\n ->: {}".format(l1, round(l1, 1)))
+        print("7. Rounding with a function: round.")
+        print("Rounded to 1 number: {}\n ->: {}".format(l1, round(l1, 1)))
