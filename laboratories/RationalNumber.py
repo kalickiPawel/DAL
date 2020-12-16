@@ -1,6 +1,7 @@
 import math
 
-class Liczba_wymierna:
+
+class RationalNumber:
     def __init__(self, integer_part, numerator, denominator):
 
         if denominator <= 0 and numerator !=0:
@@ -31,9 +32,8 @@ class Liczba_wymierna:
             self.integer_part, self.numerator, self.denominator = self.convert_to_mixed_num(self._numerator, self._denominator)
         else:
             self.integer_part = integer_part
-            #self.numerator, self.denominator = self.get_complex_fraction()
+            # self.numerator, self.denominator = self.get_complex_fraction()
             self.numerator, self.denominator = 0,0
-    
 
     def __repr__(self):
         if self.integer_part:
@@ -109,45 +109,43 @@ class Liczba_wymierna:
     def __add__(self, other):
         n1, d1 = self.get_complex_fraction()
         n2, d2 = other.get_complex_fraction()
-        
-        # sprowadzic do wspolnego mianownika
+
         n1_f = n1 * d2
         d1_f = d1 * d2
         n2_f = n2 * d1
         d2_f = d2 * d1
 
-        return Liczba_wymierna(0, n1_f + n2_f, d1_f)
+        return RationalNumber(0, n1_f + n2_f, d1_f)
 
     def __sub__(self, other):
         n1, d1 = self.get_complex_fraction()
         n2, d2 = other.get_complex_fraction()
-        
-        # sprowadzic do wspolnego mianownika
+
         n1_f = n1 * d2
         d1_f = d1 * d2
         n2_f = n2 * d1
         d2_f = d2 * d1
 
-        return Liczba_wymierna(0, n1_f - n2_f, d1_f)
+        return RationalNumber(0, n1_f - n2_f, d1_f)
 
     def __mul__(self, other):
         numerator = self._numerator * other._numerator
         denominator = self._denominator * other._denominator
-        return Liczba_wymierna(0, numerator, denominator)
+        return RationalNumber(0, numerator, denominator)
     
     def __truediv__(self, other):
         n, d = other.get_complex_fraction()
         if n < 0:
             d = -d
             n = -n
-        return self.__mul__(Liczba_wymierna(0, d, n))
+        return self.__mul__(RationalNumber(0, d, n))
     
     def __pow__(self, other):
-        return Liczba_wymierna(0, self._numerator ** other, self._denominator ** other)
+        return RationalNumber(0, self._numerator ** other, self._denominator ** other)
 
     def __abs__(self):
         n, d = self.get_complex_fraction()
-        return Liczba_wymierna(0, abs(n), d)
+        return RationalNumber(0, abs(n), d)
 
     def __bool__(self):
         n, d = self.get_complex_fraction()

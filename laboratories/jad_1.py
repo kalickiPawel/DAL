@@ -1,9 +1,9 @@
-from laboratories.Liczba_wymierna import Liczba_wymierna
+from laboratories.RationalNumber import RationalNumber
 
 
 class FirstLab:
     # L = Liczba_wymierna(-3, 32, 64)
-    L = Liczba_wymierna(3, 0, 0)
+    L = RationalNumber(3, 0, 0)
 
     def __init__(self):
         print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
@@ -11,42 +11,42 @@ class FirstLab:
         self.exercise_01()
         self.exercise_02()
         self.exercise_03(
-            Liczba_wymierna(2, 2, 4),
-            Liczba_wymierna(0, 10, 4)
+            RationalNumber(2, 2, 4),
+            RationalNumber(0, 10, 4)
         )
         self.exercise_04(
-            Liczba_wymierna(0, -1, 2),
-            Liczba_wymierna(0, -3, 4),
+            RationalNumber(0, -1, 2),
+            RationalNumber(0, -3, 4),
             abs_state=False
         )
         self.exercise_04(
-            Liczba_wymierna(0, 2, 7),
-            Liczba_wymierna(0, -2, 7),
+            RationalNumber(0, 2, 7),
+            RationalNumber(0, -2, 7),
             abs_state=True
         )
         self.exercise_05()
         self.exercise_06(
-            Liczba_wymierna(0, 2, 7),
-            Liczba_wymierna(1, 0, 7),
-            Liczba_wymierna(0, 0, 1),
-            Liczba_wymierna(2, 8, 7),
+            RationalNumber(0, 2, 7),
+            RationalNumber(1, 0, 7),
+            RationalNumber(0, 0, 1),
+            RationalNumber(2, 8, 7),
             op_type='bool'
         )
         self.exercise_06(
-            Liczba_wymierna(1, 0, 7),
-            Liczba_wymierna(2, 6, 7),
-            Liczba_wymierna(-2, 6, 7),
-            Liczba_wymierna(2, 8, 7),
+            RationalNumber(1, 0, 7),
+            RationalNumber(2, 6, 7),
+            RationalNumber(-2, 6, 7),
+            RationalNumber(2, 8, 7),
             op_type='int'
         )
         self.exercise_06(
-            Liczba_wymierna(0, 3, 4),
-            Liczba_wymierna(0, -3, 4),
-            Liczba_wymierna(2, 3, 4),
-            Liczba_wymierna(-2, 3, 4),
+            RationalNumber(0, 3, 4),
+            RationalNumber(0, -3, 4),
+            RationalNumber(2, 3, 4),
+            RationalNumber(-2, 3, 4),
             op_type='float'
         )
-        self.exercise_07(Liczba_wymierna(0, 3, 4))
+        self.exercise_07(RationalNumber(0, 3, 4))
         print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 
     def exercise_01(self):
