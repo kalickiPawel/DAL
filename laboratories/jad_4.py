@@ -7,6 +7,9 @@ from sympy import symbols, Eq, solve
 from scipy.optimize import minimize, fsolve
 from scipy.integrate import trapz
 
+from src.utils import get_project_root
+
+root = get_project_root()
 
 def exercise1():
     print("Exercise 1 ---------Started---------")
