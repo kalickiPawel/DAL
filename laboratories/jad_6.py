@@ -30,7 +30,7 @@ if __name__ == "__main__":
     '''
         Zadanie 2
     '''
-    filename = './data/soybean.arff'
+    filename = '../data/soybean.arff'
     data, meta = arff.loadarff(filename)
     df1 = pd.DataFrame(data).select_dtypes([np.object]).stack().str.decode('utf-8').unstack()
     print(f'Probek w pliku: {df1.shape[0]}')

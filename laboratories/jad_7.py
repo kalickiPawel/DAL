@@ -6,7 +6,7 @@ from scipy.io import arff
 
 if __name__ == "__main__":
     # Exercise 1.
-    filename = './data/weather.arff'
+    filename = '../data/weather.arff'
     data, meta = arff.loadarff(filename)
 
     df1 = pd.DataFrame(data)

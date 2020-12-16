@@ -5,7 +5,7 @@ from scipy.io import arff
 
 if __name__ == "__main__":
     # Zadanie 1.
-    filename = './data/stock.arff'
+    filename = '../data/stock.arff'
     data, meta = arff.loadarff(filename)
     df = pd.DataFrame(data)
     # Zadanie 2.
