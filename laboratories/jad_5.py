@@ -1,94 +1,99 @@
-from scipy.spatial import KDTree
+import os
 import numpy as np
 
+from scipy.spatial import KDTree
+from src.utils import get_project_root
 
-def interpolate_knn(xi, x, y, k):
-    """
-    Funkcja interpolująca, oparta na metodzie k najbliższych sąsiadów
-    :param xi: wartość, dla której chcemy dokonać interpolacji
-    :param x: macierz argumentówwęzłów interpolacji
-    :param y: wektor wartości węzłów interpolacji
-    :param k: liczba uwzględnianych sąsiadów
-    :return: średnia arytmetyczna z wartości y dla k najbliższych sąsiadów
-    """
-    tree = KDTree(x)
-    res = tree.query(xi, k)
-
-    s = 0
-    for i in res[1]:
-        s += y[i]
-    return s / len(res[1])
+root = get_project_root()
 
 
-def klasyfikuj_kNN(x, xc, yc, k):
-    """
-    Klasyfikator, oparty na metodzie k najbliższych sąsiadów
-    :param x: wartość, dla której chcemy dokonać klasyfikacji
-    :param xc: macierz atrybutów wejściowych danych uczących
-    :param yc: wektor klas zadanych
-    :param k: liczba uwzględnianych sąsiadów
-    :return: najczęstsza klasa spośród k najbliższych sąsiadów
-    """
-    tree = KDTree(xc)
-    res = tree.query(x, k)
-    u, count = np.unique(np.unique(yc[res[1]]), return_counts=True)
-    idx = np.argmax(count)
-    return u[idx]
+class FifthLab:
+    def __init__(self):
+        print("~~~~~~~~~~~~~~~~~~~~~~~Exercise 1~~~~~~~~~~~~~~~~~~~~")
 
+        x = np.loadtxt(os.path.join(root, os.path.join('data', 'dane3d_i.txt')))
+        y = np.loadtxt(os.path.join(root, os.path.join('data', 'dane3d_o.txt')))
+        xi, k = (5, 7), 3
+        yi = self.interpolate_knn(xi, x, y, k)
+        print(f"The arithmetic mean of the y values for the {k} nearest neighbors is: {yi}")
 
-def walidacja(X, Y):
-    """
-    Funkcja klasyfikatora, która dobierze optymalną
-    dla określonego zbioru danych liczbę k sąsiadów,
-    za pomocą kroswalidacji metodą minus jednego elementu.
-    :param X: zbiór wejściowy
-    :param Y: zbiór wyjściowy
-    :return: optymalna liczba k sąsiadów,
-    :return: dokładność z jaką została dobrana warość,
-    :return: pozostałe wyniki
-    """
-    best_value, best_k, results = 0.0, 0, []
-    k_list = (1, 3, 7, 9, 27)
-    for k in k_list:
-        true_predictions = 0
-        for i in range(X.shape[0]):
-            X_train, Y_train = np.delete(X, obj=i, axis=0), np.delete(Y, obj=i, axis=0)
-            X_test, Y_test = X[i, :], Y[i]
-            predicted = klasyfikuj_kNN(X_test, X_train, Y_train, k)
-            if predicted == Y_test:
-                true_predictions += 1
-        result = true_predictions / X.shape[0]
-        results.append(result)
-        if result > best_value:
-            best_value = result
-            best_k = k
-    return best_k, best_value, results
+        print("~~~~~~~~~~~~~~~~~~~~~~~Exercise 2~~~~~~~~~~~~~~~~~~~~")
 
+        xc = np.loadtxt(os.path.join(root, os.path.join('data', 'dane_3D_kapitan_i.txt')))
+        yc = np.loadtxt(os.path.join(root, os.path.join('data', 'dane_3D_kapitan_o.txt')))
+        x, k = (-21.18, -3.9, -7.3), 3
+        knn_class = self.classify_knn(x, xc, yc, k)
+        print(f"The value of the most common class among {k} nearest neighbors is: {knn_class}")
 
-if __name__ == "__main__":
-    '''
-    ------------Zadanie 1--------------
-    '''
-    x = np.loadtxt("./data/dane3d_i.txt")
-    y = np.loadtxt("./data/dane3d_o.txt")
-    xi, k = (5, 7), 3
-    yi = interpolate_knn(xi, x, y, k)
-    print(f"Średnia arytmetyczna z wartości y dla {k} najbliższych sąsiadówy wynosi: {yi}")
+        print("~~~~~~~~~~~~~~~~~~~~~~~Exercise 3~~~~~~~~~~~~~~~~~~~~")
 
-    '''
-    ------------Zadanie 2--------------
-    '''
-    xc = np.loadtxt("./data/dane_3D_kapitan_i.txt")
-    yc = np.loadtxt("./data/dane_3D_kapitan_o.txt")
-    x, k = (-21.18, -3.9, -7.3), 3
-    klasa = klasyfikuj_kNN(x, xc, yc, k)
-    print(f"Wartość najczęstszej klasy spośród {k} najbliższych sąsiadów: {klasa}")
+        x = np.loadtxt(os.path.join(root, os.path.join('data', 'dane_8D_diabet_i.txt')))
+        y = np.loadtxt(os.path.join(root, os.path.join('data', 'dane_8D_diabet_o.txt')))
+        best_k, best_score, scores = self.validation(x, y)
+        print(f"The best parameter of k: {best_k} with precision {best_score}")
+        print("Results: ", scores)
 
-    '''
-    ------------Zadanie 3--------------
-    '''
-    x = np.loadtxt('data/dane_8D_diabet_i.txt')
-    y = np.loadtxt('data/dane_8D_diabet_o.txt')
-    best_k, best_score, scores = walidacja(x, y)
-    print(f"Najlepszy parametr k: {best_k} z dokładnością {best_score}")
-    print("Wyniki: ", scores)
+    @staticmethod
+    def interpolate_knn(xi, x, y, k):
+        """
+        Interpolation function, based on k nearest neighbour algorithm
+        :param xi: value to interpolate
+        :param x: matrix of interpolation node arguments
+        :param y: vector of interpolation node values
+        :param k: number of included neighbors
+        :return: arithmetic mean of the y values for the k nearest neighbors
+        """
+
+        tree = KDTree(x)
+        res = tree.query(xi, k)
+
+        s = 0
+        for i in res[1]:
+            s += y[i]
+        return s / len(res[1])
+
+    @staticmethod
+    def classify_knn(x, xc, yc, k):
+        """
+        Classifier, based on k nearest neighbour algorithm
+        :param x: value to classify
+        :param xc: matrix of the input attributes of the training data
+        :param yc: vector of given classes
+        :param k: number of included neighbors
+        :return: the most common class among the k nearest neighbors
+        """
+
+        tree = KDTree(xc)
+        res = tree.query(x, k)
+        u, count = np.unique(np.unique(yc[res[1]]), return_counts=True)
+        idx = np.argmax(count)
+        return u[idx]
+
+    def validation(self, x, y):
+        """
+        A classifier function that will select the optimal one
+        for a given data set, the number of k neighbors,
+        using the minus one element cross-validation method.
+        :param x: input set
+        :param y: output set
+        :return: optimal number of k neighbors
+        :return: precision with which the value was selected
+        :return: other results
+        """
+
+        best_value, best_k, results = 0.0, 0, []
+        k_list = (1, 3, 7, 9, 27)
+        for k in k_list:
+            true_predictions = 0
+            for i in range(x.shape[0]):
+                x_train, y_train = np.delete(x, obj=i, axis=0), np.delete(y, obj=i, axis=0)
+                x_test, y_test = x[i, :], y[i]
+                predicted = self.classify_knn(x_test, x_train, y_train, k)
+                if predicted == y_test:
+                    true_predictions += 1
+            result = true_predictions / x.shape[0]
+            results.append(result)
+            if result > best_value:
+                best_value = result
+                best_k = k
+        return best_k, best_value, results
