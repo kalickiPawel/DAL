@@ -1,7 +1,7 @@
 from laboratories.Liczba_wymierna import Liczba_wymierna
 
 
-class FirstLabo:
+class FirstLab:
     # L = Liczba_wymierna(-3, 32, 64)
     L = Liczba_wymierna(3, 0, 0)
 

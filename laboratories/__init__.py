@@ -1,1 +1,1 @@
-from laboratories.jad_1 import FirstLabo
+from laboratories.jad_1 import FirstLab
