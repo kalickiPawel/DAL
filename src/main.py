@@ -1,4 +1,4 @@
-from laboratories import FirstLab, SecondLab, ThirdLab, FourthLab, FifthLab, SixthLab
+from laboratories import FirstLab, SecondLab, ThirdLab, FourthLab, FifthLab, SixthLab, EighthLab
 
 if __name__ == "__main__":
     lab1 = FirstLab()
@@ -7,3 +7,4 @@ if __name__ == "__main__":
     lab4 = FourthLab()
     lab5 = FifthLab()
     lab6 = SixthLab()
+    lab8 = EighthLab()
